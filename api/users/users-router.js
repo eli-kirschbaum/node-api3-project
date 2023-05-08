@@ -4,9 +4,11 @@ const express = require('express');
   validateUser,
   validatePost,
   
- } = require('../middleware/middleware')
-// You will need `users-model.js` and `posts-model.js` both
-// The middleware functions also need to be required
+ } = require('../middleware/middleware');
+
+const blah = require('./users-model');
+const bleh = require('../posts/posts-model');
+
 
 const router = express.Router();
 
@@ -53,6 +55,14 @@ router.post('/:id/posts', validateUserId, validatePost, (req, res) => {
   // and another middleware to check that the request body is valid
   console.log(req.user)
 });
+
+router.use((err, req, res, next) => {
+  res.status(err.status || 500).json({
+    customMessage: 'the router just blew up in your face',
+    message: err.message,
+    stack: err.stack,
+  })
+})
 
 // do not forget to export the router
 
