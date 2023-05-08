@@ -17,7 +17,7 @@ async function validateUserId(req, res, next) {
     const user = await User.getById(req.params.id)
     if (!user) {
       res.status(404).json({
-        message: 'no such user',
+        message: 'user not found',
       })
     }
     else {
@@ -33,12 +33,13 @@ async function validateUserId(req, res, next) {
 
   
 function validateUser(req, res, next) {
-  console.log('validateUser middleware ')
-  if (!req.body.name) {
+  const { name } = req.body
+  if (!name || !name.trim()) {
     res.status(400).json({
-      message: "missing required name field"
+      message: 'missing required name field',
     })
-  } else{
+  } else {
+    req.name = name.trim()
     next()
   }
 }
