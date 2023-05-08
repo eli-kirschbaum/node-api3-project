@@ -6,15 +6,19 @@ const express = require('express');
   
  } = require('../middleware/middleware');
 
-const blah = require('./users-model');
-const bleh = require('../posts/posts-model');
+const User = require('./users-model');
+const Post = require('../posts/posts-model');
 
 
 const router = express.Router();
 
-router.get('/', (req, res) => {
+router.get('/', (req, res, next) => {
   // RETURN AN ARRAY WITH ALL THE USERS
-  
+  User.get()
+    .then(users => {
+      res.json(users)
+    })
+    .catch(next)
 });
 
 router.get('/:id', validateUserId, (req, res) => {
